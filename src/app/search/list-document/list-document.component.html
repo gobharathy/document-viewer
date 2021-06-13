@@ -1,0 +1,21 @@
+<caption class="text-nowrap">
+    List Documents
+</caption>
+<table class="table" *ngIf="(documents$ | async) as documents">
+    <thead>
+        <tr>
+            <th>
+                Name
+            </th>
+            <th>
+                Date
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let document of documents">
+            <td>{{document.name}}</td>
+            <td>{{document.date| date: 'short'}}</td>
+        </tr>
+    </tbody>
+</table>

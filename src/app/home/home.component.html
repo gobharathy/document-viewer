@@ -1,0 +1,11 @@
+<div class="row">
+  <div class="col-2">
+    <a href="#" class="list-group-item"><span>Operations</span></a>
+    <a href="#" [routerLink]="['browse']" class="list-group-item" [routerLinkActive]="['active']"><i class="fa fa-compass"></i> <span>Browse</span></a>
+    <a href="#" [routerLink]="['search']" class="list-group-item" [routerLinkActive]="['active']"><i class="fa fa-credit-card"></i>
+      <span>Search</span></a>
+  </div>
+  <div class="col-10">
+    <router-outlet></router-outlet>
+  </div>
+</div>
