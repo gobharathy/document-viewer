@@ -9,6 +9,7 @@ import { SearchComponent } from './search/search.component';
 import { BrowseComponent } from './browse/browse.component';
 import { HeaderComponent } from './header/header.component';
 import { ListDocumentComponent } from './search/list-document/list-document.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { ListDocumentComponent } from './search/list-document/list-document.comp
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

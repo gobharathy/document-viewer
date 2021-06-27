@@ -1,21 +1,41 @@
-<caption class="text-nowrap">
-    List Documents
-</caption>
-<table class="table" *ngIf="(documents$ | async) as documents">
-    <thead>
-        <tr>
-            <th>
-                Name
-            </th>
-            <th>
-                Date
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let document of documents">
-            <td>{{document.name}}</td>
-            <td>{{document.date| date: 'short'}}</td>
-        </tr>
-    </tbody>
-</table>
+<div *ngIf="(documents$ | async) as documents">
+    <div *ngIf="documents.length>0">
+        <caption class="text-nowrap">
+            Result
+        </caption>
+        <table class="table table-bordered table-striped" style="width:100%">
+            <thead class="thead-light">
+                <tr>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        Date
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let document of documents">
+                    <td>{{document.name}}</td>
+                    <td>{{document.created_at| date: 'short'}}</td>
+                </tr>
+            </tbody>
+        </table>
+        <nav aria-label="Page navigation example" *ngIf="(pageSetting$ | async) as pageSetting">
+            <ul class="pagination justify-content-end">
+                <li class="page-item">
+                    <input type="button" class="page-link" (click)="changePage(pageSetting.currentPage - 1)"
+                        [disabled]="pageSetting.currentPage === 1" tabindex="-1" value="Previous" />
+                </li>
+                <li class="page-item" [ngClass]="{'active' : (page+1) === pageSetting.currentPage }"
+                    *ngFor="let number of counter(pageSetting.pageCount || 0); let page = index">
+                    <input type="button" class="page-link" (click)="changePage(page+1)" value="{{page+1}}" />
+                </li>
+                <li class="page-item">
+                    <input type="button" class="page-link" (click)="changePage(pageSetting.currentPage + 1)"
+                        [disabled]="pageSetting.pageCount === pageSetting.currentPage" tabindex="-1" value="Next" />
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>

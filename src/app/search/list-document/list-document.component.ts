@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable, of } from 'rxjs';
-export interface Document {
-  name: string;
-  date: Date
-}
+import { Document } from '../document.model'
+import { PageSetting } from '../page-setting.model';
+import { SearchService } from '../search.service';
 
 @Component({
   selector: 'app-list-document',
@@ -12,19 +11,22 @@ export interface Document {
 })
 export class ListDocumentComponent implements OnInit {
 
-  documents$: Observable<{ name: string, date: Date }[]> = of([
-    {
-      name: 'Document1',
-      date: new Date(),
-    },
-    {
-      name: 'Document2',
-      date: new Date(),
-    }
-  ]);
+  documents$: Observable<Document[]>;
+  pageSetting$: Observable<PageSetting | undefined>;
 
-  constructor() { }
+  constructor(private searchService: SearchService) {
+    this.documents$ = searchService.documents$;
+    this.pageSetting$ = searchService.pageSetting$;
+  }
   ngOnInit(): void {
   }
 
+  changePage(currentPage: number): void {
+    this.searchService.updatePage(currentPage);
+  }
+
+  counter(i: number): number[] {
+    return new Array(i);
+  }
 }
+
