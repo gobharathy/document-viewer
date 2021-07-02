@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Document } from './document.model';
 import {
-  map, distinctUntilChanged, skip
+  map, distinctUntilChanged
 } from 'rxjs/operators';
 import { PageSetting } from './page-setting.model';
 
@@ -34,22 +34,23 @@ export class SearchService {
 
   load(searchText: string): void {
     this.httpClient.get('https://gorest.co.in/public-api/users').subscribe((response: any) => {
-      const pagination = { ..._state.pageSetting };
       this.documents = response.data;
-      pagination.pageCount = Math.ceil(this.documents.length / 5);
-      this.updateState({ ..._state, documents: this.documents, pageSetting: { ...pagination } });
+      this.updateState({ documents: this.documents, pageSetting: { ..._state.pageSetting } });
+      this.updatePage(1);
     });
   }
 
   updatePage(currentPage: number) {
-    this.updateState({ documents: [...this.documents], pageSetting: { ..._state.pageSetting, currentPage: currentPage } });
+    const pageSetting = { ..._state.pageSetting, currentPage };
+    const pageCount = Math.ceil(this.documents.length / pageSetting.pageSize);
+    const skip = (pageSetting.currentPage - 1) * pageSetting.pageSize;
+    const take = skip + pageSetting.pageSize;
+    const documents = this.documents.slice(skip, take);
+    this.updateState({ documents: documents, pageSetting: { ...pageSetting, pageCount } });
   }
 
   private updateState(state: SearchState) {
-    const pagination = { ...state.pageSetting };
-    const skip = (pagination.currentPage - 1) * pagination.pageSize;
-    const take = skip + pagination.pageSize;
-    state.documents = state.documents.slice(skip, take);
-    this.store.next(_state = state);
+    const localState = { ..._state, ...state };
+    this.store.next(_state = localState);
   }
 }
